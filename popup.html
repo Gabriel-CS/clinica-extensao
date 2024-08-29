@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"> <!-- Define o conjunto de caracteres como UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura o viewport para otimizar a exibição em dispositivos móveis -->
+  <title>Comparecimento</title> <!-- Define o título da página -->
+  <link rel="stylesheet" href="assets/flatpickr.min.css"> <!-- Inclui o arquivo de estilo para o flatpickr -->
+  <style>
+    body {
+      width: 400px; /* Define a largura do corpo da página */
+      height: 500px; /* Define a altura do corpo da página */
+      font-family: Arial, sans-serif; /* Define a fonte usada no corpo da página */
+      margin: 0; /* Remove a margem padrão do corpo da página */
+      padding: 0; /* Remove o preenchimento padrão do corpo da página */
+      display: flex; /* Usa Flexbox para layout */
+      flex-direction: column; /* Alinha os itens em uma coluna */
+      background-color: #f4f4f4; /* Define a cor de fundo da página */
+    }
+    #calendar {
+      flex: 1; /* Faz o elemento ocupar o espaço restante disponível */
+      padding: 20px; /* Adiciona preenchimento interno ao elemento */
+      border-bottom: 1px solid #ddd; /* Adiciona uma borda inferior cinza clara */
+      display: flex; /* Usa Flexbox para layout */
+      justify-content: center; /* Centraliza o conteúdo horizontalmente */
+      align-items: center; /* Centraliza o conteúdo verticalmente */
+      background: #ffffff; /* Define a cor de fundo do elemento */
+      border-radius: 8px; /* Adiciona bordas arredondadas ao elemento */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil ao elemento */
+    }
+    #details {
+      padding: 20px; /* Adiciona preenchimento interno ao elemento */
+      background: #ffffff; /* Define a cor de fundo do elemento */
+      border-radius: 8px; /* Adiciona bordas arredondadas ao elemento */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil ao elemento */
+      display: flex; /* Usa Flexbox para layout */
+      flex-direction: column; /* Alinha os itens em uma coluna */
+      gap: 15px; /* Adiciona espaçamento entre os itens */
+    }
+    #details p {
+      margin: 0; /* Remove a margem padrão dos parágrafos */
+      font-size: 14px; /* Define o tamanho da fonte dos parágrafos */
+      color: #333; /* Define a cor do texto dos parágrafos */
+    }
+    #details .input-container {
+      display: flex; /* Usa Flexbox para layout */
+      align-items: center; /* Alinha os itens verticalmente */
+    }
+    #details .input-group {
+      display: flex; /* Usa Flexbox para layout */
+      align-items: center; /* Alinha os itens verticalmente */
+      gap: 5px; /* Adiciona espaçamento entre os itens */
+    }
+    #details input[type="number"] {
+      width: 120px; /* Define a largura do campo de entrada numérico */
+      padding: 8px; /* Adiciona preenchimento interno ao campo de entrada */
+      font-size: 14px; /* Define o tamanho da fonte no campo de entrada */
+      border: 1px solid #ccc; /* Adiciona uma borda cinza clara ao campo de entrada */
+      border-radius: 4px; /* Adiciona bordas arredondadas ao campo de entrada */
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra interna ao campo de entrada */
+      margin-left: 0; /* Remove a margem esquerda do campo de entrada */
+    }
+    #details button {
+      padding: 8px 16px; /* Adiciona preenchimento interno ao botão */
+      font-size: 14px; /* Define o tamanho da fonte do botão */
+      background-color: #007bff; /* Define a cor de fundo do botão */
+      color: #fff; /* Define a cor do texto do botão */
+      border: none; /* Remove a borda padrão do botão */
+      border-radius: 4px; /* Adiciona bordas arredondadas ao botão */
+      cursor: pointer; /* Muda o cursor para uma mão ao passar sobre o botão */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil ao botão */
+      transition: background-color 0.3s; /* Adiciona uma transição suave na cor de fundo do botão */
+    }
+    #details button:hover {
+      background-color: #0056b3; /* Muda a cor de fundo do botão quando o cursor está sobre ele */
+    }
+    #datepicker {
+      display: none; /* Oculta o campo de entrada do datepicker */
+    }
+  </style>
+</head>
+<body>
+  <div id="calendar">
+    <!-- Contêiner para o datepicker -->
+    <input id="datepicker" type="text" /> <!-- Campo de entrada para selecionar a data -->
+  </div>
+  <div id="details">
+    <!-- Contêiner para os detalhes e input -->
+    <p class="preview">Previsão: <span id="previewValue">0</span></p>
+    <!-- Parágrafo que exibe a previsão atual com um valor inicial de 0 -->
+    <div class="input-container">
+      <!-- Contêiner para o grupo de inputs -->
+      <p style="margin-right: 5px;">Número de comparecimento:</p>
+      <!-- Texto informativo ao lado do campo de entrada -->
+      <div class="input-group">
+        <!-- Grupo que contém o campo de entrada e o botão -->
+        <input type="number" id="attendance" min="0" placeholder="Insira o número" />
+        <!-- Campo de entrada para inserir o número de comparecimentos -->
+        <button id="confirmButton">Confirmar</button>
+        <!-- Botão para confirmar o número inserido -->
+      </div>
+    </div>
+  </div>
+  <script src="assets/flatpickr.min.js"></script>
+  <!-- Inclui o arquivo JavaScript para o flatpickr -->
+  <script src="assets/pt.js"></script>
+  <!-- Inclui o arquivo de tradução para português do flatpickr -->
+  <script src="popup.js"></script>
+  <!-- Inclui o arquivo JavaScript com a lógica personalizada -->
+</body>
+</html>
