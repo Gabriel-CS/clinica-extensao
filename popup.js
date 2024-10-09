@@ -1,31 +1,60 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Adiciona um ouvinte de eventos que será executado quando o DOM estiver completamente carregado
-
+  // Inicializa o flatpickr no elemento de data
   flatpickr('#datepicker', {
-    // Inicializa o flatpickr no campo de entrada com id 'datepicker'
-    dateFormat: "Y-m-d", // Define o formato da data
-    inline: true, // Exibe o calendário inline (não como um popup)
-    disableMobile: true, // Desativa a versão móvel do seletor de datas
-    clickOpens: false, // Desativa a abertura automática do calendário ao clicar no campo de entrada
-    locale: 'pt' // Define a localidade para português
+      dateFormat: "Y-m-d",
+      inline: true,
+      disableMobile: true,
+      clickOpens: false,
+      locale: "pt",
+      minDate: "today",
+      onChange: async function (selectedDates) {
+          const date = selectedDates[0];
+          if (date) {
+              const diaAtual = (date.getDay() + 6) % 7; // Ajusta o dia para que segunda-feira = 0
+              await getDataFromAPI(diaAtual); // Chama a função para buscar a previsão
+          }
+      }
   });
 
-  document.getElementById('attendance').addEventListener('input', function () {
-    // Adiciona um ouvinte de eventos que será executado sempre que o valor do campo de entrada mudar
-    const attendance = this.value; // Obtém o valor atual do campo de entrada
-    const preview = calculatePreview(attendance); // Calcula a previsão com base no valor inserido
-    document.getElementById('previewValue').textContent = preview; // Atualiza o conteúdo do elemento com id 'previewValue' com o valor da previsão
-  });
+  const attendanceInput = document.getElementById('attendance');
+  const confirmButton = document.getElementById('confirmButton');
+  const previewValue = document.getElementById('previewValue');
 
-  document.getElementById('confirmButton').addEventListener('click', function () {
-    // Adiciona um ouvinte de eventos que será executado quando o botão for clicado
-    const attendance = document.getElementById('attendance').value; // Obtém o valor atual do campo de entrada
-    console.log('Número de comparecimento:', attendance); // Exibe o valor no console
-  });
+  // Verifica se o elemento 'attendance' existe antes de adicionar o listener
+  if (attendanceInput) {
+      attendanceInput.addEventListener('input', async function () {
+          const preview = await getDataFromAPI(); // Aguarda a resposta da API
+          previewValue.textContent = preview; // Atualiza o valor no elemento
+      });
+  }
 
-  function calculatePreview(attendance) {
-    // Função que calcula a previsão baseada no valor de comparecimento
-    return attendance ? Math.min(100, Math.max(0, parseInt(attendance, 10))) : 0;
-    // Retorna o valor ajustado entre 0 e 100, ou 0 se o valor estiver vazio
+  // Verifica se o elemento 'confirmButton' existe antes de adicionar o listener
+  if (confirmButton) {
+      confirmButton.addEventListener('click', function () {
+          const attendance = attendanceInput ? attendanceInput.value : '';
+          console.log('Número de comparecimento:', attendance);
+      });
+  };
+
+  async function getDataFromAPI(diaAtual) {
+      try {
+          const response = await fetch(`http://localhost:5000/${diaAtual}`);
+          if (!response.ok) {
+              throw new Error('Erro na requisição: ' + response.status);
+          }
+          const data = await response.json(); // Converte a resposta para JSON
+          console.log('Dados da API:', data);
+
+          // Manipula a resposta da API
+          if (data.status === "success") {
+              // Atualiza os elementos com os dados da API
+              previewValue.textContent = `${data.day}, Previsão: ${data.prediction}`;
+          } else {
+              previewValue.textContent = `${data.message}`;
+          }
+      } catch (error) {
+          console.error('Erro ao fazer a requisição:', error);
+          previewValue.textContent = "Erro ao obter dados"; // Exibe mensagem de erro
+      }
   }
 });
